@@ -1,0 +1,150 @@
+from pyspark.sql.types import DateType, StructType, StructField, StringType, IntegerType, LongType, FloatType, BooleanType, ArrayType
+  
+train_location = "/FileStore/tables/train.csv"
+test_location = "/FileStore/tables/test-1.csv"
+test_lab_location = "/FileStore/tables/test_lab.csv"
+
+  // Schemas
+
+  train_schema = StructType(fields=[
+    StructField("id", IntegerType(), True),
+    StructField("host_id", IntegerType(), True),
+    StructField("host_since", StringType(), True),
+    StructField("host_response_time", StringType(), True),
+    StructField("host_response_rate", StringType(), True),
+    StructField("host_acceptance_rate", StringType(), True),
+    StructField("host_is_superhost", StringType(), True),
+    StructField("host_listings_count", IntegerType(), True),
+    StructField("host_total_listings_count", IntegerType(), True),
+    StructField("host_verifications", StringType(), True),
+    StructField("host_has_profile_pic", StringType(), True),
+    StructField("host_identity_verified", StringType(), True),
+    StructField("latitude", FloatType(), True),
+    StructField("longitude", FloatType(), True),
+    StructField("property_type", StringType(), True),
+    StructField("room_type", StringType(), True),
+    StructField("accommodates", IntegerType(), True),
+    StructField("bathrooms_text", StringType(), True),
+    StructField("bedrooms", IntegerType(), True),
+    StructField("beds", IntegerType(), True),
+    StructField("amenities", StringType(), True),
+    StructField("minimum_nights", IntegerType(), True),
+    StructField("maximum_nights", IntegerType(), True),
+    StructField("minimum_minimum_nights", IntegerType(), True),
+    StructField("maximum_minimum_nights", IntegerType(), True),
+    StructField("minimum_maximum_nights", IntegerType(), True),
+    StructField("maximum_maximum_nights", IntegerType(), True),
+    StructField("minimum_nights_avg_ntm", IntegerType(), True),
+    StructField("maximum_nights_avg_ntm", IntegerType(), True),
+    StructField("has_availability", StringType(), True),
+    StructField("availability_30", IntegerType(), True),
+    StructField("availability_60", IntegerType(), True),
+    StructField("availability_90", IntegerType(), True),
+    StructField("availability_365", IntegerType(), True),
+    StructField("number_of_reviews", IntegerType(), True),
+    StructField("number_of_reviews_ltm", IntegerType(), True),
+    StructField("number_of_reviews_l30d", IntegerType(), True),
+    StructField("first_review", StringType(), True),
+    StructField("last_review", StringType(), True),
+    StructField("review_scores_rating", FloatType(), True),
+    StructField("review_scores_accuracy", FloatType(), True),
+    StructField("review_scores_cleanliness", FloatType(), True),
+    StructField("review_scores_checkin", FloatType(), True),
+    StructField("review_scores_communication", FloatType(), True),
+    StructField("review_scores_location", FloatType(), True),
+    StructField("review_scores_value", FloatType(), True),
+    StructField("license", StringType(), True),
+    StructField("instant_bookable", StringType(), True),
+    StructField("calculated_host_listings_count", IntegerType(), True),
+    StructField("calculated_host_listings_count_entire_homes", IntegerType(), True),
+    StructField("calculated_host_listings_count_private_rooms", IntegerType(), True),
+    StructField("calculated_host_listings_count_shared_rooms", IntegerType(), True),
+    StructField("reviews_per_month", FloatType(), True),
+    StructField("expensive", IntegerType(), True)
+])
+
+test_schema = StructType(fields=[
+    StructField("id", IntegerType(), True),
+    StructField("host_id", IntegerType(), True),
+    StructField("host_since", StringType(), True),
+    StructField("host_response_time", StringType(), True),
+    StructField("host_response_rate", StringType(), True),
+    StructField("host_acceptance_rate", StringType(), True),
+    StructField("host_is_superhost", StringType(), True),
+    StructField("host_listings_count", IntegerType(), True),
+    StructField("host_total_listings_count", IntegerType(), True),
+    StructField("host_verifications", StringType(), True),
+    StructField("host_has_profile_pic", StringType(), True),
+    StructField("host_identity_verified", StringType(), True),
+    StructField("latitude", FloatType(), True),
+    StructField("longitude", FloatType(), True),
+    StructField("property_type", StringType(), True),
+    StructField("room_type", StringType(), True),
+    StructField("accommodates", IntegerType(), True),
+    StructField("bathrooms_text", StringType(), True),
+    StructField("bedrooms", IntegerType(), True),
+    StructField("beds", IntegerType(), True),
+    StructField("amenities", StringType(), True),
+    StructField("minimum_nights", IntegerType(), True),
+    StructField("maximum_nights", IntegerType(), True),
+    StructField("minimum_minimum_nights", IntegerType(), True),
+    StructField("maximum_minimum_nights", IntegerType(), True),
+    StructField("minimum_maximum_nights", IntegerType(), True),
+    StructField("maximum_maximum_nights", IntegerType(), True),
+    StructField("minimum_nights_avg_ntm", IntegerType(), True),
+    StructField("maximum_nights_avg_ntm", IntegerType(), True),
+    StructField("has_availability", StringType(), True),
+    StructField("availability_30", IntegerType(), True),
+    StructField("availability_60", IntegerType(), True),
+    StructField("availability_90", IntegerType(), True),
+    StructField("availability_365", IntegerType(), True),
+    StructField("number_of_reviews", IntegerType(), True),
+    StructField("number_of_reviews_ltm", IntegerType(), True),
+    StructField("number_of_reviews_l30d", IntegerType(), True),
+    StructField("first_review", StringType(), True),
+    StructField("last_review", StringType(), True),
+    StructField("review_scores_rating", FloatType(), True),
+    StructField("review_scores_accuracy", FloatType(), True),
+    StructField("review_scores_cleanliness", FloatType(), True),
+    StructField("review_scores_checkin", FloatType(), True),
+    StructField("review_scores_communication", FloatType(), True),
+    StructField("review_scores_location", FloatType(), True),
+    StructField("review_scores_value", FloatType(), True),
+    StructField("license", StringType(), True),
+    StructField("instant_bookable", StringType(), True),
+    StructField("calculated_host_listings_count", IntegerType(), True),
+    StructField("calculated_host_listings_count_entire_homes", IntegerType(), True),
+    StructField("calculated_host_listings_count_private_rooms", IntegerType(), True),
+    StructField("calculated_host_listings_count_shared_rooms", IntegerType(), True),
+    StructField("reviews_per_month", FloatType(), True)
+])
+
+test_lab_schema = StructType(fields=[
+    StructField("id", IntegerType(), True),
+    StructField("expensive", IntegerType(), True)
+])
+
+
+// table creation
+
+  train_df = spark.read.option("header", "true") \
+               .option("delimiter", ",") \
+               .option("escape", '"')\
+               .schema(train_schema) \
+               .csv(train_location)
+
+test_df = spark.read.option("header", "true") \
+               .option("delimiter", ",") \
+               .option("escape", '"')\
+               .schema(test_schema) \
+               .csv(test_location)
+
+test_lab_df = spark.read.option("header", "true") \
+               .option("delimiter", ",") \
+               .option("escape", '"')\
+               .schema(test_lab_schema) \
+               .csv(test_lab_location)
+
+train_df.write.mode("overwrite").format("delta").saveAsTable("train_df")
+test_df.write.mode("overwrite").format("delta").saveAsTable("test_df")
+test_lab_df.write.mode("overwrite").format("delta").saveAsTable("test_lab_df")
