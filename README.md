@@ -8,22 +8,22 @@ I have worked on this project in order to gain more exprience and explore differ
 3. SQL
 4. Spark
 
-## Files
+# Files
 
-# data
+## data
 Airbnb Properties Data  - A csv file containing 6760 rows and 54 columns.
 
-# notebooks
+## notebooks
 data loading - Loading the data and create train and test spark dataframes.
 data analysis sql - Data analysis in SQL before processing.
 data analysis python - Data analysis in python before processing.
 classes and functions - Functions that are used for processing and analyzing the data.
 results - Data processing and prediction.
 
-# to be added
+## to be added
 data analysis python - Data analysis in python before processing.
 
-## Results
+# Results
 sklearn's logistic regression model - accuracy Score: 0.77
                                       precision Score: 0.91
                                       recall Score: 0.76
